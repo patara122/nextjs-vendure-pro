@@ -72,9 +72,11 @@ export async function query<TResult, TVariables>(
     headers[VENDURE_CHANNEL_TOKEN_HEADER] = channelToken || VENDURE_CHANNEL_TOKEN;
 
     const url = new URL(VENDURE_API_URL!);
-    if (languageCode) {
-        url.searchParams.set('languageCode', languageCode);
-    }
+    
+    // Force language code to 'en' since the backend only has English products,
+    // otherwise selecting 'th' or 'de' will return no products.
+    url.searchParams.set('languageCode', 'en');
+
     if (currencyCode) {
         url.searchParams.set('currencyCode', currencyCode);
     }

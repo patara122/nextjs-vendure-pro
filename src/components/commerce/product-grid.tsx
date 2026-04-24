@@ -1,10 +1,10 @@
-import {ResultOf} from '@/graphql';
-import {ProductCard} from './product-card';
-import {Pagination} from '@/components/shared/pagination';
-import {SortDropdown} from './sort-dropdown';
-import {SearchProductsQuery} from "@/lib/vendure/queries";
-import {getRouteLocale} from '@/i18n/server';
-import {getTranslations} from 'next-intl/server';
+import { ResultOf } from '@/graphql';
+import { ProductCard } from './product-card';
+import { Pagination } from '@/components/shared/pagination';
+import { SortDropdown } from './sort-dropdown';
+import { SearchProductsQuery } from "@/lib/vendure/queries";
+import { getRouteLocale } from '@/i18n/server';
+import { getTranslations } from 'next-intl/server';
 
 interface ProductGridProps {
     productDataPromise: Promise<{
@@ -15,9 +15,9 @@ interface ProductGridProps {
     take: number;
 }
 
-export async function ProductGrid({productDataPromise, currentPage, take}: ProductGridProps) {
+export async function ProductGrid({ productDataPromise, currentPage, take }: ProductGridProps) {
     const locale = await getRouteLocale();
-    const t = await getTranslations({locale, namespace: 'Product'});
+    const t = await getTranslations({ locale, namespace: 'Product' });
     const result = await productDataPromise;
 
     const searchResult = result.data.search;
@@ -35,19 +35,19 @@ export async function ProductGrid({productDataPromise, currentPage, take}: Produ
         <div className="space-y-8">
             <div className="flex items-center justify-between">
                 <p className="text-sm text-muted-foreground">
-                    {t('productCount', {count: searchResult.totalItems})}
+                    {t('productCount', { count: searchResult.totalItems })}
                 </p>
-                <SortDropdown/>
+                <SortDropdown />
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-5">
                 {searchResult.items.map((product, i) => (
-                    <ProductCard key={'product-grid-item' + i} product={product}/>
+                    <ProductCard key={'product-grid-item' + i} product={product} />
                 ))}
             </div>
 
             {totalPages > 1 && (
-                <Pagination currentPage={currentPage} totalPages={totalPages}/>
+                <Pagination currentPage={currentPage} totalPages={totalPages} />
             )}
         </div>
     );

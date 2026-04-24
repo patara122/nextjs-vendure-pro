@@ -69,6 +69,7 @@ export function MobileNav({collections}: MobileNavProps) {
                     {/* Shop All */}
                     <div>
                         <SheetClose
+                            nativeButton={false}
                             render={
                                 <Link
                                     href="/search"
@@ -92,6 +93,7 @@ export function MobileNav({collections}: MobileNavProps) {
                                 {collections.map((collection) => (
                                     <SheetClose
                                         key={collection.slug}
+                                        nativeButton={false}
                                         render={
                                             <Link
                                                 href={`/collection/${collection.slug}`}
@@ -114,6 +116,7 @@ export function MobileNav({collections}: MobileNavProps) {
                         </p>
                         <nav className="flex flex-col gap-0.5">
                             <SheetClose
+                                nativeButton={false}
                                 render={
                                     <Link
                                         href="/account/profile"
@@ -126,6 +129,7 @@ export function MobileNav({collections}: MobileNavProps) {
                                 {t('profile')}
                             </SheetClose>
                             <SheetClose
+                                nativeButton={false}
                                 render={
                                     <Link
                                         href="/account/orders"
@@ -138,6 +142,7 @@ export function MobileNav({collections}: MobileNavProps) {
                                 {t('orders')}
                             </SheetClose>
                             <SheetClose
+                                nativeButton={false}
                                 render={
                                     <Link
                                         href="/account/addresses"
