@@ -20,6 +20,9 @@ const nextConfig: NextConfig = {
             },
             {
                 hostname: 's3.hhh.co.th'
+            },
+            {
+                hostname: 'vendure.hhh.co.th'
             }
         ],
     },
