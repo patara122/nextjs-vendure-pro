@@ -13,11 +13,10 @@ interface RelatedProductsProps {
     currentProductId: string;
 }
 
-async function getRelatedProducts(collectionSlug: string, currentProductId: string, currencyCode: string) {
+async function getRelatedProducts(collectionSlug: string, currentProductId: string, currencyCode: string, locale: string) {
     'use cache'
     cacheLife('hours')
 
-    const locale = await getRouteLocale();
     cacheTag(`related-products-${collectionSlug}-${locale}-${currencyCode}`);
     cacheTag('products');
 
@@ -44,7 +43,7 @@ export async function RelatedProducts({ collectionSlug, currentProductId }: Rela
     const locale = await getRouteLocale();
     const currencyCode = await getActiveCurrencyCode();
     const t = await getTranslations({locale, namespace: 'Product'});
-    const products = await getRelatedProducts(collectionSlug, currentProductId, currencyCode);
+    const products = await getRelatedProducts(collectionSlug, currentProductId, currencyCode, locale);
 
     if (products.length === 0) {
         return null;

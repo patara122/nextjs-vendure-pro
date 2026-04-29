@@ -28,11 +28,10 @@ import {getActiveCurrencyCode} from '@/lib/currency-server';
 import {getRouteLocale} from '@/i18n/server';
 import {getTranslations} from 'next-intl/server';
 
-async function getCollectionProducts(slug: string, searchParams: { [key: string]: string | string[] | undefined }, currencyCode: string) {
+async function getCollectionProducts(slug: string, searchParams: { [key: string]: string | string[] | undefined }, currencyCode: string, locale: string) {
     'use cache';
     cacheLife('hours');
 
-    const locale = await getRouteLocale();
     cacheTag(`collection-${slug}-${locale}-${currencyCode}`);
     cacheTag('collection');
 
@@ -44,11 +43,10 @@ async function getCollectionProducts(slug: string, searchParams: { [key: string]
     }, {languageCode: locale, currencyCode});
 }
 
-async function getCollectionMetadata(slug: string) {
+async function getCollectionMetadata(slug: string, locale: string) {
     'use cache';
     cacheLife('hours');
 
-    const locale = await getRouteLocale();
     cacheTag(`collection-meta-${slug}-${locale}`);
 
     return query(GetCollectionProductsQuery, {
@@ -62,7 +60,7 @@ export async function generateMetadata({
 }: PageProps<'/[locale]/collection/[slug]'>): Promise<Metadata> {
     const { slug } = await params;
     const locale = await getRouteLocale();
-    const result = await getCollectionMetadata(slug);
+    const result = await getCollectionMetadata(slug, locale);
     const collection = result.data.collection;
 
     const t = await getTranslations({locale, namespace: 'Product'});
@@ -115,8 +113,8 @@ export default async function CollectionPage({params, searchParams}: PageProps<'
     const t = await getTranslations({locale, namespace: 'Product'});
     const page = getCurrentPage(searchParamsResolved);
 
-    const productDataPromise = getCollectionProducts(slug, searchParamsResolved, currencyCode);
-    const collectionResult = await getCollectionMetadata(slug);
+    const productDataPromise = getCollectionProducts(slug, searchParamsResolved, currencyCode, locale);
+    const collectionResult = await getCollectionMetadata(slug, locale);
     const collectionName = collectionResult.data.collection?.name ?? slug;
 
     return (

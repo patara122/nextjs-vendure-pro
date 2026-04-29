@@ -9,9 +9,6 @@ import {getTranslations} from 'next-intl/server';
 const COPYRIGHT_YEAR = 2026;
 
 async function Copyright() {
-    'use cache'
-    cacheLife('days');
-
     const locale = await getRouteLocale();
     const t = await getTranslations({locale, namespace: 'Footer'});
 
@@ -23,11 +20,7 @@ async function Copyright() {
 }
 
 export async function Footer() {
-    'use cache'
-    cacheLife('days');
-
     const locale = await getRouteLocale();
-    cacheTag(`footer-${locale}`);
 
     const t = await getTranslations({locale, namespace: 'Footer'});
     const collections = await getTopCollections(locale);

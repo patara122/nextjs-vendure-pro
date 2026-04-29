@@ -8,11 +8,10 @@ import { Link } from '@/i18n/navigation';
 import {ArrowRight} from "lucide-react";
 import {getTranslations} from 'next-intl/server';
 
-async function getFeaturedCollectionProducts(currencyCode: string) {
+async function getFeaturedCollectionProducts(currencyCode: string, locale: string) {
     'use cache'
     cacheLife('days')
 
-    const locale = await getRouteLocale();
     cacheTag(`featured-${locale}-${currencyCode}`);
     cacheTag('products');
 
@@ -36,7 +35,7 @@ export async function FeaturedProducts() {
     const locale = await getRouteLocale();
     const currencyCode = await getActiveCurrencyCode();
     const t = await getTranslations({locale, namespace: 'Product'});
-    const products = await getFeaturedCollectionProducts(currencyCode);
+    const products = await getFeaturedCollectionProducts(currencyCode, locale);
 
     return (
         <div>
