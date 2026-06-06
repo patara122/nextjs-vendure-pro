@@ -167,10 +167,6 @@ export function ProductInfo({ product, searchParams, currencyCode }: ProductInfo
 
             <Separator />
 
-            {/* Product Description */}
-            <div className="prose prose-sm max-w-none text-muted-foreground">
-                <div dangerouslySetInnerHTML={{ __html: product.description }} />
-            </div>
 
             {/* Option Groups */}
             {sortedOptionGroups.length > 0 && (
@@ -206,6 +202,13 @@ export function ProductInfo({ product, searchParams, currencyCode }: ProductInfo
                     ))}
                 </div>
             )}
+
+            <Separator />
+
+            {/* Product Description */}
+            <div className="prose prose-sm max-w-none text-muted-foreground">
+                <div dangerouslySetInnerHTML={{ __html: product.description }} />
+            </div>
 
             {/* Stock Status */}
             {/* {selectedVariant && (
