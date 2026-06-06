@@ -1,16 +1,16 @@
-import {getRouteLocale} from '@/i18n/server';
-import {cacheLife, cacheTag} from 'next/cache';
-import {getTopCollections} from '@/lib/vendure/cached';
+import { getRouteLocale } from '@/i18n/server';
+import { cacheLife, cacheTag } from 'next/cache';
+import { getTopCollections } from '@/lib/vendure/cached';
 import Image from "next/image";
-import {NavigationLink} from '@/components/shared/navigation-link';
-import {getTranslations} from 'next-intl/server';
+import { NavigationLink } from '@/components/shared/navigation-link';
+import { getTranslations } from 'next-intl/server';
 
 
 const COPYRIGHT_YEAR = 2026;
 
 async function Copyright() {
     const locale = await getRouteLocale();
-    const t = await getTranslations({locale, namespace: 'Footer'});
+    const t = await getTranslations({ locale, namespace: 'Footer' });
 
     return (
         <div>
@@ -22,7 +22,7 @@ async function Copyright() {
 export async function Footer() {
     const locale = await getRouteLocale();
 
-    const t = await getTranslations({locale, namespace: 'Footer'});
+    const t = await getTranslations({ locale, namespace: 'Footer' });
     const collections = await getTopCollections(locale);
 
     return (
@@ -65,7 +65,7 @@ export async function Footer() {
                                     {t('shopAll')}
                                 </NavigationLink>
                             </li>
-                            <li>
+                            {/* <li>
                                 <NavigationLink
                                     href="/account/orders"
                                     className="hover:text-foreground transition-colors"
@@ -80,11 +80,11 @@ export async function Footer() {
                                 >
                                     {t('account')}
                                 </NavigationLink>
-                            </li>
+                            </li> */}
                         </ul>
                     </div>
 
-                    <div>
+                    {/* <div>
                         <p className="text-sm font-semibold mb-4">{t('vendure')}</p>
                         <ul className="space-y-2 text-sm text-muted-foreground">
                             <li>
@@ -118,14 +118,14 @@ export async function Footer() {
                                 </a>
                             </li>
                         </ul>
-                    </div>
+                    </div> */}
                 </div>
 
                 {/* Bottom Section */}
                 <div
                     className="mt-12 pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
-                    <Copyright/>
-                    <div className="flex items-center gap-2">
+                    <Copyright />
+                    {/* <div className="flex items-center gap-2">
                         <span>{t('poweredBy')}</span>
                         <a
                             href="https://vendure.io"
@@ -144,7 +144,7 @@ export async function Footer() {
                         >
                             <Image src="/next.svg" alt="Next.js" width={16} height={16} className="h-5 w-auto dark:invert" />
                         </a>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </footer>

@@ -1,16 +1,16 @@
-import type {Metadata} from "next";
-import {Suspense} from "react";
-import {getRouteLocale} from "@/i18n/server";
-import {HeroSection} from "@/components/layout/hero-section";
-import {FeaturedProducts} from "@/components/commerce/featured-products";
-import {SITE_NAME, SITE_URL, buildCanonicalUrl} from "@/lib/metadata";
-import {BadgeCheck, Tag, Zap} from "lucide-react";
-import {getTranslations} from 'next-intl/server';
-import {toOgLocale} from '@/i18n/locale-utils';
+import type { Metadata } from "next";
+import { Suspense } from "react";
+import { getRouteLocale } from "@/i18n/server";
+import { HeroSection } from "@/components/layout/hero-section";
+import { FeaturedProducts } from "@/components/commerce/featured-products";
+import { SITE_NAME, SITE_URL, buildCanonicalUrl } from "@/lib/metadata";
+import { BadgeCheck, Tag, Zap } from "lucide-react";
+import { getTranslations } from 'next-intl/server';
+import { toOgLocale } from '@/i18n/locale-utils';
 
 export async function generateMetadata(): Promise<Metadata> {
     const locale = await getRouteLocale();
-    const t = await getTranslations({locale, namespace: 'Home'});
+    const t = await getTranslations({ locale, namespace: 'Home' });
     const ogLocale = toOgLocale(locale);
 
     return {
@@ -32,23 +32,23 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 const featureKeys = [
-    {icon: BadgeCheck, key: 'highQuality'},
-    {icon: Tag, key: 'bestPrices'},
-    {icon: Zap, key: 'fastDelivery'},
+    { icon: BadgeCheck, key: 'highQuality' },
+    { icon: Tag, key: 'bestPrices' },
+    { icon: Zap, key: 'fastDelivery' },
 ] as const;
 
 export default async function Home() {
     const locale = await getRouteLocale();
-    const t = await getTranslations({locale, namespace: 'Home'});
+    const t = await getTranslations({ locale, namespace: 'Home' });
 
     return (
         <div className="min-h-screen">
-            <HeroSection/>
+            <HeroSection />
             <Suspense>
-                <FeaturedProducts/>
+                <FeaturedProducts />
             </Suspense>
 
-            <section className="py-16 md:py-24 bg-muted/30">
+            {/* <section className="py-16 md:py-24 bg-muted/30">
                 <div className="container mx-auto px-4">
                     <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-center mb-12">
                         {t('whyShopWithUs')}
@@ -68,7 +68,7 @@ export default async function Home() {
                         ))}
                     </div>
                 </div>
-            </section>
+            </section> */}
         </div>
     );
 }

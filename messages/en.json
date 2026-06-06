@@ -55,6 +55,8 @@
     "errorTitle": "Error",
     "errorAddToCart": "Failed to add item to cart",
     "sku": "SKU: {sku}",
+    "supplierCode": "Supplier Code: {code}",
+    "barcode": "Barcode: {barcode}",
     "from": "From",
     "noImage": "No image",
     "featuredProducts": "Featured Products",

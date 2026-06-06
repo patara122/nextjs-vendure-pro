@@ -1,17 +1,17 @@
 'use client';
 
-import {useState, useMemo, useTransition} from 'react';
-import {useSearchParams} from 'next/navigation';
-import {usePathname, useRouter} from '@/i18n/navigation';
-import {Button} from '@/components/ui/button';
-import {Label} from '@/components/ui/label';
-import {RadioGroup, RadioGroupItem} from '@/components/ui/radio-group';
-import {Separator} from '@/components/ui/separator';
-import {ShoppingCart, CheckCircle2} from 'lucide-react';
-import {addToCart} from '@/app/[locale]/product/[slug]/actions';
-import {toast} from 'sonner';
-import {Price} from '@/components/commerce/price';
-import {useTranslations} from 'next-intl';
+import { useState, useMemo, useTransition } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { usePathname, useRouter } from '@/i18n/navigation';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Separator } from '@/components/ui/separator';
+import { ShoppingCart, CheckCircle2 } from 'lucide-react';
+import { addToCart } from '@/app/[locale]/product/[slug]/actions';
+import { toast } from 'sonner';
+import { Price } from '@/components/commerce/price';
+import { useTranslations } from 'next-intl';
 
 interface ProductInfoProps {
     product: {
@@ -22,6 +22,10 @@ interface ProductInfoProps {
             id: string;
             name: string;
             sku: string;
+            customFields?: {
+                SupplierSKU?: string | null;
+                Barcode?: string | null;
+            } | null;
             priceWithTax: number;
             stockLevel: string;
             options: Array<{
@@ -51,7 +55,7 @@ interface ProductInfoProps {
     currencyCode: string;
 }
 
-export function ProductInfo({product, searchParams, currencyCode}: ProductInfoProps) {
+export function ProductInfo({ product, searchParams, currencyCode }: ProductInfoProps) {
     const t = useTranslations('Product');
     const pathname = usePathname();
     const router = useRouter();
@@ -59,12 +63,21 @@ export function ProductInfo({product, searchParams, currencyCode}: ProductInfoPr
     const [isPending, startTransition] = useTransition();
     const [isAdded, setIsAdded] = useState(false);
 
+    const sortedOptionGroups = useMemo(() => {
+        return product.optionGroups.map((group) => ({
+            ...group,
+            options: [...group.options].sort((a, b) =>
+                a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' })
+            ),
+        }));
+    }, [product.optionGroups]);
+
     // Initialize selected options from URL
     const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>(() => {
         const initialOptions: Record<string, string> = {};
 
         // Load from URL search params
-        product.optionGroups.forEach((group) => {
+        sortedOptionGroups.forEach((group) => {
             const paramValue = searchParams[group.code];
             if (typeof paramValue === 'string') {
                 // Find the option by code
@@ -85,7 +98,7 @@ export function ProductInfo({product, searchParams, currencyCode}: ProductInfoPr
         }
 
         // If not all option groups have a selection, return null
-        if (Object.keys(selectedOptions).length !== product.optionGroups.length) {
+        if (Object.keys(selectedOptions).length !== sortedOptionGroups.length) {
             return null;
         }
 
@@ -95,7 +108,7 @@ export function ProductInfo({product, searchParams, currencyCode}: ProductInfoPr
             const selectedOptionIds = Object.values(selectedOptions);
             return selectedOptionIds.every((optId) => variantOptionIds.includes(optId));
         });
-    }, [selectedOptions, product.variants, product.optionGroups]);
+    }, [selectedOptions, product.variants, sortedOptionGroups]);
 
     const handleOptionChange = (groupId: string, optionId: string) => {
         setSelectedOptions((prev) => ({
@@ -104,14 +117,14 @@ export function ProductInfo({product, searchParams, currencyCode}: ProductInfoPr
         }));
 
         // Find the option group and option to get their codes
-        const group = product.optionGroups.find((g) => g.id === groupId);
+        const group = sortedOptionGroups.find((g) => g.id === groupId);
         const option = group?.options.find((opt) => opt.id === optionId);
 
         if (group && option) {
             // Update URL with option code
             const params = new URLSearchParams(currentSearchParams);
             params.set(group.code, option.code);
-            router.push(`${pathname}?${params.toString()}`, {scroll: false});
+            router.push(`${pathname}?${params.toString()}`, { scroll: false });
         }
     };
 
@@ -124,7 +137,7 @@ export function ProductInfo({product, searchParams, currencyCode}: ProductInfoPr
             if (result.success) {
                 setIsAdded(true);
                 toast.success(t('addedToCartMessage'), {
-                    description: t('addedToCartDescription', {name: product.name}),
+                    description: t('addedToCartDescription', { name: product.name }),
                 });
 
                 // Reset the added state after 2 seconds
@@ -147,7 +160,7 @@ export function ProductInfo({product, searchParams, currencyCode}: ProductInfoPr
                 <h1 className="text-3xl md:text-4xl font-bold tracking-tight">{product.name}</h1>
                 {selectedVariant && (
                     <p className="text-2xl md:text-3xl text-muted-foreground font-semibold mt-3">
-                        <Price value={selectedVariant.priceWithTax} currencyCode={currencyCode}/>
+                        <Price value={selectedVariant.priceWithTax} currencyCode={currencyCode} />
                     </p>
                 )}
             </div>
@@ -156,13 +169,13 @@ export function ProductInfo({product, searchParams, currencyCode}: ProductInfoPr
 
             {/* Product Description */}
             <div className="prose prose-sm max-w-none text-muted-foreground">
-                <div dangerouslySetInnerHTML={{__html: product.description}}/>
+                <div dangerouslySetInnerHTML={{ __html: product.description }} />
             </div>
 
             {/* Option Groups */}
-            {product.optionGroups.length > 0 && (
+            {sortedOptionGroups.length > 0 && (
                 <div className="space-y-5">
-                    {product.optionGroups.map((group) => (
+                    {sortedOptionGroups.map((group) => (
                         <div key={group.id} className="space-y-3">
                             <Label className="text-base font-semibold">
                                 {group.name}
@@ -171,7 +184,7 @@ export function ProductInfo({product, searchParams, currencyCode}: ProductInfoPr
                                 value={selectedOptions[group.id] || ''}
                                 onValueChange={(value) => handleOptionChange(group.id, value)}
                             >
-                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                                <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
                                     {group.options.map((option) => (
                                         <div key={option.id}>
                                             <RadioGroupItem
@@ -195,7 +208,7 @@ export function ProductInfo({product, searchParams, currencyCode}: ProductInfoPr
             )}
 
             {/* Stock Status */}
-            {selectedVariant && (
+            {/* {selectedVariant && (
                 <div className="text-sm">
                     {isInStock ? (
                         <span className="inline-flex items-center gap-1.5 text-green-600 font-medium">
@@ -209,10 +222,10 @@ export function ProductInfo({product, searchParams, currencyCode}: ProductInfoPr
                         </span>
                     )}
                 </div>
-            )}
+            )} */}
 
             {/* Add to Cart Button */}
-            <div className="pt-2 space-y-3">
+            {/* <div className="pt-2 space-y-3">
                 <Button
                     size="lg"
                     className="w-full h-12 text-base font-semibold rounded-lg"
@@ -229,7 +242,7 @@ export function ProductInfo({product, searchParams, currencyCode}: ProductInfoPr
                             <ShoppingCart className="mr-2 h-5 w-5"/>
                             {isPending
                                 ? t('adding')
-                                : !selectedVariant && product.optionGroups.length > 0
+                                : !selectedVariant && sortedOptionGroups.length > 0
                                     ? t('selectOptions')
                                     : !isInStock
                                         ? t('outOfStock')
@@ -237,12 +250,18 @@ export function ProductInfo({product, searchParams, currencyCode}: ProductInfoPr
                         </>
                     )}
                 </Button>
-            </div>
+            </div> */}
 
-            {/* SKU */}
+            {/* SKU & Custom Metadata */}
             {selectedVariant && (
-                <div className="text-xs text-muted-foreground">
-                    {t('sku', {sku: selectedVariant.sku})}
+                <div className="space-y-1 text-xs text-muted-foreground">
+                    <div>{t('sku', { sku: selectedVariant.sku })}</div>
+                    {selectedVariant.customFields?.SupplierSKU && (
+                        <div>{t('supplierCode', { code: selectedVariant.customFields.SupplierSKU })}</div>
+                    )}
+                    {selectedVariant.customFields?.Barcode && (
+                        <div>{t('barcode', { barcode: selectedVariant.customFields.Barcode })}</div>
+                    )}
                 </div>
             )}
         </div>

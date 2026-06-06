@@ -1,7 +1,7 @@
 import type {Metadata, Viewport} from "next";
 import {locale as rootLocale} from "next/root-params";
 import {hasLocale, NextIntlClientProvider} from "next-intl";
-import {Geist, Geist_Mono} from "next/font/google";
+import {Geist, Geist_Mono, Google_Sans} from "next/font/google";
 import {getMessages, getTranslations, setRequestLocale} from "next-intl/server";
 import {notFound} from "next/navigation";
 import {routing} from "@/i18n/routing";
@@ -22,6 +22,12 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
     variable: "--font-geist-mono",
     subsets: ["latin"],
+});
+
+const googleSans = Google_Sans({
+    variable: "--font-google-sans",
+    subsets: ["latin", "thai"],
+    weight: ["400", "500", "700"],
 });
 
 export function generateStaticParams() {
@@ -90,7 +96,7 @@ export default async function LocaleLayout({children}: {children: React.ReactNod
     return (
         <html lang={locale} data-scroll-behavior="smooth" suppressHydrationWarning>
             <body
-                className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
+                className={`${geistSans.variable} ${geistMono.variable} ${googleSans.variable} font-sans antialiased flex flex-col min-h-screen`}
             >
                 <NextIntlClientProvider locale={locale} messages={messages}>
                     <ThemeProvider>

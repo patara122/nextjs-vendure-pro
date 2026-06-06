@@ -55,6 +55,8 @@
         "errorTitle": "ข้อผิดพลาด",
         "errorAddToCart": "ไม่สามารถเพิ่มสินค้าลงในตะกร้าได้",
         "sku": "SKU: {sku}",
+        "supplierCode": "รหัสสินค้าผู้ผลิต: {code}",
+        "barcode": "บาร์โค้ด: {barcode}",
         "from": "จาก",
         "noImage": "ไม่มีรูปภาพ",
         "featuredProducts": "สินค้าแนะนำ",
