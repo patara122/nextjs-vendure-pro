@@ -180,7 +180,7 @@ export function ProductInfo({ product, searchParams, currencyCode }: ProductInfo
                                 value={selectedOptions[group.id] || ''}
                                 onValueChange={(value) => handleOptionChange(group.id, value)}
                             >
-                                <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+                                <div className="grid grid-cols-4 sm:grid-cols-5 gap-2">
                                     {group.options.map((option) => (
                                         <div key={option.id}>
                                             <RadioGroupItem

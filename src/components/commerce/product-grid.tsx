@@ -32,7 +32,7 @@ export async function ProductGrid({ productDataPromise, currentPage, take }: Pro
     }
 
     return (
-        <div className="space-y-8">
+        <div className="space-y-5">
             <div className="flex items-center justify-between">
                 <p className="text-sm text-muted-foreground">
                     {t('productCount', { count: searchResult.totalItems })}
