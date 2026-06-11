@@ -29,10 +29,10 @@ import {
     buildCanonicalUrl,
     buildOgImages,
 } from '@/lib/metadata';
-import {getTranslations} from 'next-intl/server';
-import {toOgLocale} from '@/i18n/locale-utils';
-import {getActiveCurrencyCode} from '@/lib/currency-server';
-import {getRouteLocale} from '@/i18n/server';
+import { getTranslations } from 'next-intl/server';
+import { toOgLocale } from '@/i18n/locale-utils';
+import { getActiveCurrencyCode } from '@/lib/currency-server';
+import { getRouteLocale } from '@/i18n/server';
 
 async function getProductData(slug: string, currencyCode: string, locale: string) {
     'use cache';
@@ -41,7 +41,7 @@ async function getProductData(slug: string, currencyCode: string, locale: string
     cacheTag(`product-${slug}-${locale}-${currencyCode}`);
     cacheTag('products');
 
-    return await query(GetProductDetailQuery, {slug}, {languageCode: locale, currencyCode});
+    return await query(GetProductDetailQuery, { slug }, { languageCode: locale, currencyCode });
 }
 
 export async function generateMetadata({
@@ -53,7 +53,7 @@ export async function generateMetadata({
     const result = await getProductData(slug, currencyCode, locale);
     const product = result.data.product;
 
-    const t = await getTranslations({locale, namespace: 'Product'});
+    const t = await getTranslations({ locale, namespace: 'Product' });
 
     if (!product) {
         return {
@@ -62,7 +62,7 @@ export async function generateMetadata({
     }
 
     const description = truncateDescription(product.description);
-    const fallbackDescription = t('shopProductAt', {name: product.name, siteName: SITE_NAME});
+    const fallbackDescription = t('shopProductAt', { name: product.name, siteName: SITE_NAME });
     const ogImage = product.assets?.[0]?.preview;
     const ogLocale = toOgLocale(locale);
     const productPath = `/product/${product.slug}`;
@@ -93,12 +93,12 @@ export async function generateMetadata({
     };
 }
 
-export default async function ProductDetailPage({params, searchParams}: PageProps<'/[locale]/product/[slug]'>) {
+export default async function ProductDetailPage({ params, searchParams }: PageProps<'/[locale]/product/[slug]'>) {
     const { slug } = await params;
     const searchParamsResolved = await searchParams;
     const locale = await getRouteLocale();
     const currencyCode = await getActiveCurrencyCode();
-    const t = await getTranslations({locale, namespace: 'Product'});
+    const t = await getTranslations({ locale, namespace: 'Product' });
 
     const result = await getProductData(slug, currencyCode, locale);
 
@@ -138,7 +138,7 @@ export default async function ProductDetailPage({params, searchParams}: PageProp
     if (selectedVariant) {
         const variantAssets = selectedVariant.assets || [];
         const featuredAsset = selectedVariant.featuredAsset;
-        
+
         // Collect variant specific assets
         const specificAssets: typeof displayAssets = [];
         if (featuredAsset) specificAssets.push(featuredAsset);
@@ -195,7 +195,7 @@ export default async function ProductDetailPage({params, searchParams}: PageProp
             </div>
 
             {/* Shipping & Trust Badges */}
-            <section className="py-8 mt-8 border-y border-border/50">
+            {/* <section className="py-8 mt-8 border-y border-border/50">
                 <div className="container mx-auto px-4">
                     <div className="flex flex-wrap items-center justify-center gap-4 md:gap-8">
                         <div className="inline-flex items-center gap-2 rounded-full bg-muted/60 px-4 py-2 text-sm font-medium text-muted-foreground">
@@ -216,10 +216,10 @@ export default async function ProductDetailPage({params, searchParams}: PageProp
                         </div>
                     </div>
                 </div>
-            </section>
+            </section> */}
 
             {/* Store FAQ Section */}
-            <section className="py-16 bg-muted/30">
+            {/* <section className="py-16 bg-muted/30">
                 <div className="container mx-auto px-4 max-w-2xl">
                     <h2 className="text-2xl font-bold text-center mb-8">{t('faq.title')}</h2>
                     <Accordion className="w-full">
@@ -249,7 +249,7 @@ export default async function ProductDetailPage({params, searchParams}: PageProp
                         </AccordionItem>
                     </Accordion>
                 </div>
-            </section>
+            </section> */}
 
             {primaryCollection && (
                 <RelatedProducts
