@@ -37,8 +37,9 @@ async function getCollectionProducts(slug: string, searchParams: { [key: string]
 
     return query(SearchProductsQuery, {
         input: buildSearchInput({
-            searchParams,
-            collectionSlug: slug
+            searchParams: { ...searchParams, page: '1' },
+            collectionSlug: slug,
+            take: 10000
         })
     }, {languageCode: locale, currencyCode});
 }
@@ -112,8 +113,25 @@ export default async function CollectionPage({params, searchParams}: PageProps<'
     const currencyCode = await getActiveCurrencyCode();
     const t = await getTranslations({locale, namespace: 'Product'});
     const page = getCurrentPage(searchParamsResolved);
+    const take = 12;
 
-    const productDataPromise = getCollectionProducts(slug, searchParamsResolved, currencyCode, locale);
+    const rawProductDataPromise = getCollectionProducts(slug, searchParamsResolved, currencyCode, locale);
+    const productDataPromise = rawProductDataPromise.then((result) => {
+        const items = result.data.search.items;
+        const totalItems = items.length;
+        const paginatedItems = items.slice((page - 1) * take, page * take);
+        return {
+            ...result,
+            data: {
+                ...result.data,
+                search: {
+                    ...result.data.search,
+                    totalItems,
+                    items: paginatedItems
+                }
+            }
+        };
+    });
     const collectionResult = await getCollectionMetadata(slug, locale);
     const collectionName = collectionResult.data.collection?.name ?? slug;
 

@@ -19,10 +19,31 @@ export async function SearchResults({ searchParams }: SearchResultsProps) {
     const locale = await getRouteLocale();
     const currencyCode = await getActiveCurrencyCode();
     const page = getCurrentPage(searchParamsResolved);
+    const take = 30;
 
-    const productDataPromise = query(SearchProductsQuery, {
-        input: buildSearchInput({ searchParams: searchParamsResolved })
+    const rawProductDataPromise = query(SearchProductsQuery, {
+        input: buildSearchInput({
+            searchParams: { ...searchParamsResolved, page: '1' },
+            take: 10000
+        })
     }, { languageCode: locale, currencyCode });
+
+    const productDataPromise = rawProductDataPromise.then((result) => {
+        const items = result.data.search.items;
+        const totalItems = items.length;
+        const paginatedItems = items.slice((page - 1) * take, page * take);
+        return {
+            ...result,
+            data: {
+                ...result.data,
+                search: {
+                    ...result.data.search,
+                    totalItems,
+                    items: paginatedItems
+                }
+            }
+        };
+    });
 
 
     return (
@@ -37,7 +58,7 @@ export async function SearchResults({ searchParams }: SearchResultsProps) {
             {/* Product Grid */}
             <div className="lg:col-span-3">
                 <Suspense fallback={<ProductGridSkeleton />}>
-                    <ProductGrid productDataPromise={productDataPromise} currentPage={page} take={30} />
+                    <ProductGrid productDataPromise={productDataPromise} currentPage={page} take={take} />
                 </Suspense>
             </div>
         </div>
