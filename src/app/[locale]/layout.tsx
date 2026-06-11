@@ -101,7 +101,9 @@ export default async function LocaleLayout({children}: {children: React.ReactNod
                 <NextIntlClientProvider locale={locale} messages={messages}>
                     <ThemeProvider>
                         <Navbar />
-                        {children}
+                        <main className="flex-1 pt-14 lg:pt-0">
+                            {children}
+                        </main>
                         <Footer/>
                         <Toaster/>
                     </ThemeProvider>

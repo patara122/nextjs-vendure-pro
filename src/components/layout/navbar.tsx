@@ -54,6 +54,14 @@ export function Navbar() {
                     </div>
                 </div>
             </div>
+            {/* Mobile search bar */}
+            <div className="flex items-center h-14 lg:hidden border-t bg-background/95">
+                <div className="container mx-auto px-4">
+                    <Suspense fallback={<SearchInputSkeleton />}>
+                        <SearchInput />
+                    </Suspense>
+                </div>
+            </div>
         </header>
     );
 }
