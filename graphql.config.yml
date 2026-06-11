@@ -1,2 +1,2 @@
-schema:
-  - https://vendure.hhh.co.th/shop-api
+schema: "https://vendure.hhh.co.th/shop-api"
+documents: "src/**/*.{graphql,js,ts,jsx,tsx}"

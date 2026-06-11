@@ -111,6 +111,50 @@ export default async function ProductDetailPage({params, searchParams}: PageProp
     // Get the primary collection (prefer deepest nested / most specific)
     const primaryCollection = product.collections?.find(c => c.parent?.id) ?? product.collections?.[0];
 
+    // Find the matching variant based on selected options
+    let selectedVariant = null;
+    if (product.variants.length === 1) {
+        selectedVariant = product.variants[0];
+    } else if (product.optionGroups && product.optionGroups.length > 0) {
+        const selectedOptionIds = product.optionGroups.map((group) => {
+            const paramValue = searchParamsResolved[group.code];
+            if (typeof paramValue === 'string') {
+                const option = group.options.find((opt) => opt.code === paramValue);
+                return option ? option.id : null;
+            }
+            return null;
+        }).filter((id): id is string => id !== null);
+
+        if (selectedOptionIds.length === product.optionGroups.length) {
+            selectedVariant = product.variants.find((variant) => {
+                const variantOptionIds = variant.options.map((opt) => opt.id);
+                return selectedOptionIds.every((id) => variantOptionIds.includes(id));
+            });
+        }
+    }
+
+    // Determine the images to display
+    let displayAssets = product.assets || [];
+    if (selectedVariant) {
+        const variantAssets = selectedVariant.assets || [];
+        const featuredAsset = selectedVariant.featuredAsset;
+        
+        // Collect variant specific assets
+        const specificAssets: typeof displayAssets = [];
+        if (featuredAsset) specificAssets.push(featuredAsset);
+        variantAssets.forEach(va => {
+            if (!specificAssets.find(a => a.id === va.id)) {
+                specificAssets.push(va);
+            }
+        });
+
+        // Prepend variant specific assets to the product assets, avoiding duplicates
+        if (specificAssets.length > 0) {
+            const uniqueProductAssets = displayAssets.filter(pa => !specificAssets.find(sa => sa.id === pa.id));
+            displayAssets = [...specificAssets, ...uniqueProductAssets];
+        }
+    }
+
     return (
         <>
             <div className="container mx-auto px-4 py-8 mt-16">
@@ -140,7 +184,7 @@ export default async function ProductDetailPage({params, searchParams}: PageProp
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
                     {/* Left Column: Image Carousel */}
                     <div className="lg:sticky lg:top-20 lg:self-start">
-                        <ProductImageCarousel images={product.assets} />
+                        <ProductImageCarousel key={displayAssets[0]?.id || 'empty'} images={displayAssets} />
                     </div>
 
                     {/* Right Column: Product Info */}
