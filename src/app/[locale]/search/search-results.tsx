@@ -57,7 +57,7 @@ export async function SearchResults({ searchParams }: SearchResultsProps) {
 
             {/* Product Grid */}
             <div className="lg:col-span-3">
-                <Suspense fallback={<ProductGridSkeleton />}>
+                <Suspense fallback={<ProductGridSkeleton limit={take} />}>
                     <ProductGrid productDataPromise={productDataPromise} currentPage={page} take={take} />
                 </Suspense>
             </div>

@@ -113,7 +113,7 @@ export default async function CollectionPage({params, searchParams}: PageProps<'
     const currencyCode = await getActiveCurrencyCode();
     const t = await getTranslations({locale, namespace: 'Product'});
     const page = getCurrentPage(searchParamsResolved);
-    const take = 12;
+    const take = 15;
 
     const rawProductDataPromise = getCollectionProducts(slug, searchParamsResolved, currencyCode, locale);
     const productDataPromise = rawProductDataPromise.then((result) => {
@@ -165,8 +165,8 @@ export default async function CollectionPage({params, searchParams}: PageProps<'
 
                 {/* Product Grid */}
                 <div className="lg:col-span-3">
-                    <Suspense fallback={<ProductGridSkeleton />}>
-                        <ProductGrid productDataPromise={productDataPromise} currentPage={page} take={12} />
+                    <Suspense fallback={<ProductGridSkeleton limit={take} />}>
+                        <ProductGrid productDataPromise={productDataPromise} currentPage={page} take={take} />
                     </Suspense>
                 </div>
             </div>

@@ -32,7 +32,7 @@ export function SearchInput() {
             <Input
                 type="search"
                 placeholder={t('searchProducts')}
-                className="pl-9 w-full lg:w-80 bg-transparent"
+                className="pl-9 w-full lg:w-100 bg-transparent"
                 value={searchValue}
                 onChange={(e) => setSearchValue(e.target.value)}
                 disabled={isPending}
