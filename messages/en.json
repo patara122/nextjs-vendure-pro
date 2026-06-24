@@ -2,7 +2,7 @@
   "Navigation": {
     "openMenu": "Open menu",
     "menu": "Menu",
-    "searchProducts": "Search products...",
+    "searchProducts": "Search products, sku, barcode, product code, brand",
     "shopAll": "Shop All",
     "collections": "Collections",
     "account": "Account",

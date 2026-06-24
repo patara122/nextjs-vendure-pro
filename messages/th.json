@@ -2,7 +2,7 @@
     "Navigation": {
         "openMenu": "เปิดเมนู",
         "menu": "เมนู",
-        "searchProducts": "ค้นหาสินค้า...",
+        "searchProducts": "ค้นหาสินค้า,รหัสสินค้า,แบรนด์,รหัสผู้ผลิต,... ",
         "shopAll": "ช้อปทั้งหมด",
         "collections": "คอลเลกชัน",
         "account": "บัญชีผู้ใช้",
@@ -57,7 +57,7 @@
         "sku": "SKU: {sku}",
         "supplierCode": "รหัสสินค้าผู้ผลิต: {code}",
         "barcode": "บาร์โค้ด: {barcode}",
-        "from": "จาก",
+        "from": "ราคาเริ่มต้น",
         "noImage": "ไม่มีรูปภาพ",
         "featuredProducts": "สินค้าแนะนำ",
         "relatedProducts": "สินค้าที่เกี่ยวข้อง",
