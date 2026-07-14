@@ -31,7 +31,7 @@ export async function Footer() {
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
                     <div className="md:col-span-1">
                         <NavigationLink href="/" className="inline-block mb-4">
-                            <Image src="/vendure.svg" alt="Vendure" width={40} height={27} className="h-6 w-auto dark:invert" />
+                            <Image src="/hhh.svg" alt="Vendure" width={40} height={27} className="h-6 w-auto dark:invert" />
                         </NavigationLink>
                         <p className="text-sm text-muted-foreground text-balance leading-relaxed">
                             {t('description')}
@@ -133,7 +133,7 @@ export async function Footer() {
                             rel="noopener noreferrer"
                             className="hover:text-foreground transition-colors"
                         >
-                            <Image src="/vendure.svg" alt="Vendure" width={40} height={27} className="h-4 w-auto dark:invert" />
+                            <Image src="/hhh.svg" alt="Vendure" width={40} height={27} className="h-4 w-auto dark:invert" />
                         </a>
                         <span>&</span>
                         <a

@@ -46,6 +46,9 @@ export async function generateMetadata(): Promise<Metadata> {
             template: `%s | ${SITE_NAME}`,
         },
         description: t('siteDescription', {siteName: SITE_NAME}),
+        icons: {
+            icon: '/hhh.svg',
+        },
         openGraph: {
             type: "website",
             siteName: SITE_NAME,
