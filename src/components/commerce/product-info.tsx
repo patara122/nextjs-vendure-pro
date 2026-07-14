@@ -7,7 +7,8 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Separator } from '@/components/ui/separator';
-import { ShoppingCart, CheckCircle2 } from 'lucide-react';
+import { ShoppingCart, CheckCircle2, FileText, Video } from 'lucide-react';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { addToCart } from '@/app/[locale]/product/[slug]/actions';
 import { toast } from 'sonner';
 import { Price } from '@/components/commerce/price';
@@ -18,6 +19,16 @@ interface ProductInfoProps {
         id: string;
         name: string;
         description: string;
+        customFields?: {
+            Datasheet?: Array<{
+                filename: string | null;
+                url: string | null;
+            }> | null;
+            ProductVideo?: Array<{
+                filename: string | null;
+                url: string | null;
+            }> | null;
+        } | null;
         variants: Array<{
             id: string;
             name: string;
@@ -265,6 +276,60 @@ export function ProductInfo({ product, searchParams, currencyCode }: ProductInfo
                     {selectedVariant.customFields?.Barcode && (
                         <div>{t('barcode', { barcode: selectedVariant.customFields.Barcode })}</div>
                     )}
+                </div>
+            )}
+
+            {/* Custom fields: Datasheet & ProductVideo */}
+            {((product.customFields?.Datasheet && product.customFields.Datasheet.length > 0) ||
+              (product.customFields?.ProductVideo && product.customFields.ProductVideo.length > 0)) && (
+                <div className="space-y-3 pt-4 border-t border-border">
+                    {product.customFields?.Datasheet?.map((sheet, index) => (
+                        sheet && sheet.url && sheet.filename && (
+                            <a
+                                key={`datasheet-${index}`}
+                                href={`/api/view-pdf?url=${encodeURIComponent(sheet.url)}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center justify-center gap-3 w-full rounded-lg border border-border bg-card px-4 py-3 text-sm font-medium text-foreground shadow-sm transition-all duration-200 hover:bg-accent/5 hover:border-primary/30 hover:text-primary cursor-pointer"
+                            >
+                                <FileText className="h-5 w-5 text-black dark:text-white shrink-0" />
+                                <span className="truncate">{sheet.filename}</span>
+                            </a>
+                        )
+                    ))}
+
+                    {product.customFields?.ProductVideo?.map((video, index) => {
+                        if (!video || !video.url || !video.filename) return null;
+                        const isEmbedHtml = video.url.trim().startsWith('<');
+                        return (
+                            <Dialog key={`video-${index}`}>
+                                <DialogTrigger
+                                    className="flex items-center justify-center gap-3 w-full rounded-lg border border-border bg-card px-4 py-3 text-sm font-medium text-foreground shadow-sm transition-all duration-200 hover:bg-accent/5 hover:border-primary/30 hover:text-primary cursor-pointer"
+                                >
+                                    <Video className="h-5 w-5 text-black dark:text-white shrink-0" />
+                                    <span className="truncate">{video.filename}</span>
+                                </DialogTrigger>
+                                <DialogContent className="sm:max-w-3xl p-0 overflow-hidden bg-black border-none gap-0">
+                                    <div className="aspect-video w-full flex items-center justify-center">
+                                        {isEmbedHtml ? (
+                                            <div
+                                                className="w-full h-full [&_iframe]:w-full [&_iframe]:h-full [&_iframe]:aspect-video [&_iframe]:border-none"
+                                                dangerouslySetInnerHTML={{ __html: video.url }}
+                                            />
+                                        ) : (
+                                            <iframe
+                                                src={video.url}
+                                                title={video.filename}
+                                                className="w-full h-full border-none"
+                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                                allowFullScreen
+                                            />
+                                        )}
+                                    </div>
+                                </DialogContent>
+                            </Dialog>
+                        );
+                    })}
                 </div>
             )}
         </div>

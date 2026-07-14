@@ -50,6 +50,16 @@ export const GetProductDetailQuery = graphql(`
             name
             description
             slug
+            customFields {
+                Datasheet {
+                    filename
+                    url
+                }
+                ProductVideo {
+                    filename
+                    url
+                }
+            }
             assets {
                 id
                 preview
