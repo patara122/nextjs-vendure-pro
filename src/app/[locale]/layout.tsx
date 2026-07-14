@@ -1,17 +1,17 @@
-import type {Metadata, Viewport} from "next";
-import {locale as rootLocale} from "next/root-params";
-import {hasLocale, NextIntlClientProvider} from "next-intl";
-import {Geist, Geist_Mono, Google_Sans} from "next/font/google";
-import {getMessages, getTranslations, setRequestLocale} from "next-intl/server";
-import {notFound} from "next/navigation";
-import {routing} from "@/i18n/routing";
-import {toOgLocale} from "@/i18n/locale-utils";
-import {getRouteLocale} from "@/i18n/server";
-import {Toaster} from "@/components/ui/sonner";
-import {Navbar} from "@/components/layout/navbar";
-import {Footer} from "@/components/layout/footer";
-import {ThemeProvider} from "@/components/providers/theme-provider";
-import {SITE_NAME, SITE_URL} from "@/lib/metadata";
+import type { Metadata, Viewport } from "next";
+import { locale as rootLocale } from "next/root-params";
+import { hasLocale, NextIntlClientProvider } from "next-intl";
+import { Geist, Geist_Mono, Google_Sans } from "next/font/google";
+import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
+import { notFound } from "next/navigation";
+import { routing } from "@/i18n/routing";
+import { toOgLocale } from "@/i18n/locale-utils";
+import { getRouteLocale } from "@/i18n/server";
+import { Toaster } from "@/components/ui/sonner";
+import { Navbar } from "@/components/layout/navbar";
+import { Footer } from "@/components/layout/footer";
+import { ThemeProvider } from "@/components/providers/theme-provider";
+import { SITE_NAME, SITE_URL } from "@/lib/metadata";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -31,13 +31,13 @@ const googleSans = Google_Sans({
 });
 
 export function generateStaticParams() {
-    return routing.locales.map((locale) => ({locale}));
+    return routing.locales.map((locale) => ({ locale }));
 }
 
 export async function generateMetadata(): Promise<Metadata> {
     const locale = await getRouteLocale();
     const ogLocale = toOgLocale(locale);
-    const t = await getTranslations({locale, namespace: 'Common'});
+    const t = await getTranslations({ locale, namespace: 'Common' });
 
     return {
         metadataBase: new URL(SITE_URL),
@@ -45,7 +45,7 @@ export async function generateMetadata(): Promise<Metadata> {
             default: SITE_NAME,
             template: `%s | ${SITE_NAME}`,
         },
-        description: t('siteDescription', {siteName: SITE_NAME}),
+        description: t('siteDescription', { siteName: SITE_NAME }),
         icons: {
             icon: '/hhh.svg',
         },
@@ -81,12 +81,12 @@ export const viewport: Viewport = {
     initialScale: 1,
     maximumScale: 5,
     themeColor: [
-        {media: "(prefers-color-scheme: light)", color: "#ffffff"},
-        {media: "(prefers-color-scheme: dark)", color: "#000000"},
+        { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+        { media: "(prefers-color-scheme: dark)", color: "#000000" },
     ],
 };
 
-export default async function LocaleLayout({children}: {children: React.ReactNode}) {
+export default async function LocaleLayout({ children }: { children: React.ReactNode }) {
     const locale = await rootLocale();
 
     if (!hasLocale(routing.locales, locale)) {
@@ -94,7 +94,7 @@ export default async function LocaleLayout({children}: {children: React.ReactNod
     }
 
     setRequestLocale(locale);
-    const messages = await getMessages({locale});
+    const messages = await getMessages({ locale });
 
     return (
         <html lang={locale} data-scroll-behavior="smooth" suppressHydrationWarning>
@@ -107,8 +107,8 @@ export default async function LocaleLayout({children}: {children: React.ReactNod
                         <main className="flex-1 pt-14 lg:pt-0">
                             {children}
                         </main>
-                        <Footer/>
-                        <Toaster/>
+                        <Footer />
+                        <Toaster />
                     </ThemeProvider>
                 </NextIntlClientProvider>
             </body>
