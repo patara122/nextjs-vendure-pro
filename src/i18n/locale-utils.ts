@@ -1,12 +1,12 @@
 import {routing, type Locale} from './routing';
 
-const OG_LOCALE_MAP: Record<Locale, string> = { en: 'en_US', th: 'th_TH' };
-const INTL_LOCALE_MAP: Record<Locale, string> = { en: 'en-US', th: 'th-TH' };
+const OG_LOCALE_MAP: Record<Locale, string> = { th: 'th_TH', en: 'en_US' };
+const INTL_LOCALE_MAP: Record<Locale, string> = { th: 'th-TH', en: 'en-US' };
 
 export function toOgLocale(locale: string): string {
-    return OG_LOCALE_MAP[locale as Locale] || 'en_US';
+    return OG_LOCALE_MAP[locale as Locale] || 'th_TH';
 }
 
 export function toIntlLocale(locale: string): string {
-    return INTL_LOCALE_MAP[locale as Locale] || 'en-US';
+    return INTL_LOCALE_MAP[locale as Locale] || 'th-TH';
 }

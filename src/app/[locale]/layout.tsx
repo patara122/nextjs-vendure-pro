@@ -32,6 +32,7 @@ const googleSans = Google_Sans({
     variable: "--font-google-sans",
     subsets: ["latin", "thai"],
     weight: ["400", "500", "700"],
+    adjustFontFallback: false,
 });
 
 export function generateStaticParams() {
