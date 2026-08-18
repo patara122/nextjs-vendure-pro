@@ -24,10 +24,7 @@ const nextConfig: NextConfig = {
             {
                 hostname: 'vendure.hhh.co.th'
             }
-        ],
-    },
-    experimental: {
-        rootParams: true
+        ]
     }
 };
 
