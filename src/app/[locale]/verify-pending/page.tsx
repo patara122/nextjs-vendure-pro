@@ -7,6 +7,10 @@ import { CheckCircle } from 'lucide-react';
 import {getRouteLocale} from '@/i18n/server';
 import {getTranslations} from 'next-intl/server';
 
+// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
+// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
+
 export const metadata: Metadata = {
     title: 'Verification Pending',
     description: 'Check your email to verify your account.',
