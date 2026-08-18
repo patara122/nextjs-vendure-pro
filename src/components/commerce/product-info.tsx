@@ -191,7 +191,7 @@ export function ProductInfo({ product, searchParams, currencyCode }: ProductInfo
                                 value={selectedOptions[group.id] || ''}
                                 onValueChange={(value) => handleOptionChange(group.id, value)}
                             >
-                                <div className="grid grid-cols-4 sm:grid-cols-5 gap-2">
+                                <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
                                     {group.options.map((option) => (
                                         <div key={option.id}>
                                             <RadioGroupItem
@@ -281,57 +281,57 @@ export function ProductInfo({ product, searchParams, currencyCode }: ProductInfo
 
             {/* Custom fields: Datasheet & ProductVideo */}
             {((product.customFields?.Datasheet && product.customFields.Datasheet.length > 0) ||
-              (product.customFields?.ProductVideo && product.customFields.ProductVideo.length > 0)) && (
-                <div className="space-y-3 pt-4 border-t border-border">
-                    {product.customFields?.Datasheet?.map((sheet, index) => (
-                        sheet && sheet.url && sheet.filename && (
-                            <a
-                                key={`datasheet-${index}`}
-                                href={`/api/view-pdf?url=${encodeURIComponent(sheet.url)}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex items-center justify-center gap-3 w-full rounded-lg border border-border bg-card px-4 py-3 text-sm font-medium text-foreground shadow-sm transition-all duration-200 hover:bg-accent/5 hover:border-primary/30 hover:text-primary cursor-pointer"
-                            >
-                                <FileText className="h-5 w-5 text-black dark:text-white shrink-0" />
-                                <span className="truncate">{sheet.filename}</span>
-                            </a>
-                        )
-                    ))}
-
-                    {product.customFields?.ProductVideo?.map((video, index) => {
-                        if (!video || !video.url || !video.filename) return null;
-                        const isEmbedHtml = video.url.trim().startsWith('<');
-                        return (
-                            <Dialog key={`video-${index}`}>
-                                <DialogTrigger
+                (product.customFields?.ProductVideo && product.customFields.ProductVideo.length > 0)) && (
+                    <div className="space-y-3 pt-4 border-t border-border">
+                        {product.customFields?.Datasheet?.map((sheet, index) => (
+                            sheet && sheet.url && sheet.filename && (
+                                <a
+                                    key={`datasheet-${index}`}
+                                    href={`/api/view-pdf?url=${encodeURIComponent(sheet.url)}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                     className="flex items-center justify-center gap-3 w-full rounded-lg border border-border bg-card px-4 py-3 text-sm font-medium text-foreground shadow-sm transition-all duration-200 hover:bg-accent/5 hover:border-primary/30 hover:text-primary cursor-pointer"
                                 >
-                                    <Video className="h-5 w-5 text-black dark:text-white shrink-0" />
-                                    <span className="truncate">{video.filename}</span>
-                                </DialogTrigger>
-                                <DialogContent className="sm:max-w-3xl p-0 overflow-hidden bg-black border-none gap-0">
-                                    <div className="aspect-video w-full flex items-center justify-center">
-                                        {isEmbedHtml ? (
-                                            <div
-                                                className="w-full h-full [&_iframe]:w-full [&_iframe]:h-full [&_iframe]:aspect-video [&_iframe]:border-none"
-                                                dangerouslySetInnerHTML={{ __html: video.url }}
-                                            />
-                                        ) : (
-                                            <iframe
-                                                src={video.url}
-                                                title={video.filename}
-                                                className="w-full h-full border-none"
-                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                                allowFullScreen
-                                            />
-                                        )}
-                                    </div>
-                                </DialogContent>
-                            </Dialog>
-                        );
-                    })}
-                </div>
-            )}
+                                    <FileText className="h-5 w-5 text-black dark:text-white shrink-0" />
+                                    <span className="truncate">{sheet.filename}</span>
+                                </a>
+                            )
+                        ))}
+
+                        {product.customFields?.ProductVideo?.map((video, index) => {
+                            if (!video || !video.url || !video.filename) return null;
+                            const isEmbedHtml = video.url.trim().startsWith('<');
+                            return (
+                                <Dialog key={`video-${index}`}>
+                                    <DialogTrigger
+                                        className="flex items-center justify-center gap-3 w-full rounded-lg border border-border bg-card px-4 py-3 text-sm font-medium text-foreground shadow-sm transition-all duration-200 hover:bg-accent/5 hover:border-primary/30 hover:text-primary cursor-pointer"
+                                    >
+                                        <Video className="h-5 w-5 text-black dark:text-white shrink-0" />
+                                        <span className="truncate">{video.filename}</span>
+                                    </DialogTrigger>
+                                    <DialogContent className="sm:max-w-3xl p-0 overflow-hidden bg-black border-none gap-0">
+                                        <div className="aspect-video w-full flex items-center justify-center">
+                                            {isEmbedHtml ? (
+                                                <div
+                                                    className="w-full h-full [&_iframe]:w-full [&_iframe]:h-full [&_iframe]:aspect-video [&_iframe]:border-none"
+                                                    dangerouslySetInnerHTML={{ __html: video.url }}
+                                                />
+                                            ) : (
+                                                <iframe
+                                                    src={video.url}
+                                                    title={video.filename}
+                                                    className="w-full h-full border-none"
+                                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                                    allowFullScreen
+                                                />
+                                            )}
+                                        </div>
+                                    </DialogContent>
+                                </Dialog>
+                            );
+                        })}
+                    </div>
+                )}
         </div>
     );
 }
